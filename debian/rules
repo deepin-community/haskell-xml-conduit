@@ -1,4 +1,11 @@
 #!/usr/bin/make -f
 
-%:
-	dh $@
+DEB_ENABLE_TESTS = yes
+ifeq (0,$(shell ghc --info | grep -q 'Have interpreter.*YES'; echo $$?))
+ifeq (s390x,$(DEB_HOST_ARCH))
+	DEB_ENABLE_TESTS = no
+endif
+endif
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/hlibrary.mk
